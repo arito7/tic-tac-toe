@@ -3,9 +3,43 @@
 }
 
 body {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.text-primary {
+    color: #fff;
+}
+
+.text-secondary {
+    color: #fff;
+}
+
+.bg-primary {
     background-color: #121212;
 }
+
+.bg-secondary {
+    background-color: #212121;
+}
+
+.primary {
+    background-color: #bb86fc;
+}
+
+.secondary,
+.btn {
+    background-color: #03dac6;
+}
+
+
+
+h1 {
+    text-align: center;
+}
+
 div.game {
     margin: auto;
     display: none;
@@ -17,18 +51,19 @@ div.game {
 
 .game > .square {
     border: 1px solid #03dac6;
-    color: #bb86fc;
     font-size: 10em;
     text-align: center;
 }
 
 .form-wrapper {
+    flex: 1;
+    align-items: center;
     display: grid;
-    grid-auto-columns: auto;
-    grid-auto-rows: auto;
+    height: 100%;
+    justify-items: center;
+    width: 100%;
 }
 .form-wrapper > form {
-    background-color: #212121;
     border-radius: 8px;
     color: #fff;
     margin: 32px auto;
@@ -43,7 +78,6 @@ div.game {
     margin: 16px;
     height: 64px;
     width: 80%;
-    background-color: #bb86fc;
     border: none;
     text-align: center;
     border-radius: 32px;
@@ -51,8 +85,7 @@ div.game {
     padding: 8px;
     font-size: 32px;
 }
-.form-wrapper > form > .btn {
-    background-color: #03dac6;
+.btn {
     border: none;
     border-radius: 16px;
     color: #000;
@@ -60,4 +93,28 @@ div.game {
     height: 32px;
     margin-top: 8px;
     width: 50%;
+}
+
+.modal {
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    /* display: none; */
+    position: fixed;
+    text-align: center;
+    padding-top: 40%;
+    z-index: 1;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: #323232ee;
+    /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
+}
+
+.modal > .btn {
+    height: 48px;
+    width: 25%;
+}
+
+.modal > p {
+    font-size: 2em;
+    font-weight: bold;
 }
