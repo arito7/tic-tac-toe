@@ -3,6 +3,8 @@
 }
 
 body {
+    padding: 0;
+    margin: 0;
     display: flex;
     height: 100vh;
     flex-direction: column;
@@ -38,14 +40,16 @@ body {
 
 h1 {
     text-align: center;
+    margin-bottom: 0;
 }
 
 div.game {
-    margin: auto;
     display: none;
     grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
     justify-content: center;
+    justify-items: center;
+    margin: auto;
+    margin-top: 16px;
     max-width: 600px;
 }
 
@@ -53,6 +57,14 @@ div.game {
     border: 1px solid #03dac6;
     font-size: 10em;
     text-align: center;
+}
+
+div.game div:nth-child(-n+3){
+    border-top: none;
+}
+
+div.game div:nth-child(2n){
+    border-left: none;
 }
 
 .form-wrapper {
@@ -94,24 +106,29 @@ div.game {
     margin-top: 8px;
     width: 50%;
 }
-
+.btn:hover {
+    background-color: #02c9b5;
+}
+.btn:active {
+    scale: 0.9;
+}
 .modal {
-    color: #fff;
     width: 100%;
     height: 100%;
-    /* display: none; */
+    color: #fff;
+    display: none;
     position: fixed;
     text-align: center;
-    padding-top: 40%;
+    padding-top: 100px;
     z-index: 1;
-    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgb(0,0,0); 
     background-color: #323232ee;
-    /* background-color: rgba(0,0,0,0.4); Black w/ opacity */
 }
 
 .modal > .btn {
     height: 48px;
     width: 25%;
+    border-radius: 24px;
 }
 
 .modal > p {

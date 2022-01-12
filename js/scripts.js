@@ -1,9 +1,22 @@
-const player = (name, number) => {
+const Player = (name, number) => {
     this.name = name;
-    this.symbol = number === 1 ? 'x' : 'o';
+    this.symbol = number === 1 ? 'o' : 'x';
     const getSymbol = () => this.symbol;
     return {name, getSymbol}
-}
+};
+
+
+const Modal = (doc, query) => {
+    this.modal = doc.querySelector(query);
+    const show = () => {
+        console.log(this.modal);
+        this.modal.style.display = 'block';
+    };
+    const hide = () => {
+        this.modal.style.display = 'none';
+    };
+    return {modal, show, hide};
+};
 
 const game = (doc, player1, player2)=>{
     const x = true;
@@ -17,18 +30,24 @@ const game = (doc, player1, player2)=>{
     const WIDTH = 700;
     const cells = [];
     const wrapper = doc.querySelector('div.game');
+    const modal = Modal(doc, '.modal');
+    modal.playAgain = () => {
+        resetGame();
+        modal.hide();
+    };
+    modal.btn = modal.modal.querySelector('button');
+    modal.text = modal.modal.querySelector('p');
+    modal.btn.addEventListener('click', modal.playAgain);
 
-    // create cells
-    (()=>{
-        for(let i = 0; i < 9; i++){
-            cells[i] = null;
+    resetGame();
+
+    function render(){
+        while(wrapper.hasChildNodes()){
+            wrapper.removeChild(wrapper.firstChild);
         }
-    })();
-
-    const render = () => {
         for(let i = 0; i < 9; i++){
             let square = doc.createElement('div');
-            square.classList.add('square');
+            square.classList.add('square', 'text-primary');
             square.setAttribute(CUSTOM_ATTRIBUTES.index, i);
             square.style.width = `${WIDTH/3}px`;  
             square.style.height = `${WIDTH/3}px`;
@@ -37,14 +56,18 @@ const game = (doc, player1, player2)=>{
         }
     };
 
+    function resetGame(){
+        for(let i = 0; i < 9; i++){
+            cells[i] = null;
+        }
+        render();
+    };
+
     /**
-     * 0 game is ongoing
-     * 1 player 1 wins
-     * 2 player 2 wins
-     * 3 game is a tie
+     * 0 = game is ongoing, 1 = player 1 wins, 2 = player 2 wins, 3 = game is a tie
      * @returns 0, 1, 2, or 3
      */
-    const checkWin = () => {
+    function checkWin(){
         const checkCells = [1,3,4,5,7];
         for (let i of checkCells){
             if (cells[i] !== null){
@@ -78,7 +101,11 @@ const game = (doc, player1, player2)=>{
         return 0;
     };
 
-    const mark = (e) => {
+    /**
+     * Event Listener for when a game cell is clicked
+     * @param e event 
+     */
+    function mark(e){
         if (!e.target.getAttribute(CUSTOM_ATTRIBUTES.marked)){
             let index = e.target.getAttribute(CUSTOM_ATTRIBUTES.index);
             e.target.setAttribute(CUSTOM_ATTRIBUTES.marked, true);
@@ -90,25 +117,40 @@ const game = (doc, player1, player2)=>{
                 cells[index] = o;
             }
             currentTurn = !currentTurn;
-            switch (checkWin()){
-                case 1:
-                    console.log(player1.name, 'wins');
-                    break;
-                case 2:
-                    console.log(player2.name, 'wins');
-                    break;
-                case 3:
-                    console.log('game is a tie');
-                    break;
-            } 
+            // handling whether the game is actually over or not is
+            // delegated to gameOver()
+            gameOver(checkWin());
         }
     };
 
-    const toggleShow = () => {
+    /**
+     * Handles the result of checkWin
+     * @param result return result of checkWin 0,1,2, or 3 
+     * @returns 
+     */
+    function gameOver(result){
+        switch (result) {
+            case 0:
+                return;
+            case 1:
+                modal.text.textContent = `${player1.name} Wins!`;
+                break;
+            case 2:
+                modal.text.textContent = `${player2.name} Wins!`;
+                break;
+            case 3:
+                modal.text.textContent = `Tie!`;
+                break;
+        } 
+        modal.show();
+    };
+
+    function toggleShow(){
         // checking if its empty string first because the value is not the value initally set in css for some reason
         wrapper.style.display = wrapper.style.display === '' ? 'grid' : wrapper.style.display === 'none' ? 'grid' : 'none';
         render();
     };
+
 
     return {
         toggleShow
@@ -124,7 +166,7 @@ const start = ((doc)=>{
     const startGame = () => {
         const p1 = inputP1.value || 'Player 1';
         const p2 = inputP2.value || 'Player 2';
-        const g = game(doc, player(p1, 1), player(p2, 2));
+        const g = game(doc, Player(p1, 1), Player(p2, 2));
         toggleShow();
         g.toggleShow();
     };
