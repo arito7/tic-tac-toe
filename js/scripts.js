@@ -7,13 +7,14 @@ const Player = (name, number) => {
 
 
 const Modal = (doc, query) => {
-    this.modal = doc.querySelector(query);
+    const modal = doc.querySelector(query);
     const show = () => {
-        console.log(this.modal);
-        this.modal.style.display = 'block';
+        console.log(this)
+        modal.style.display = 'block';
     };
     const hide = () => {
-        this.modal.style.display = 'none';
+        console.log(this)
+        modal.style.display = 'none';
     };
     return {modal, show, hide};
 };
@@ -158,31 +159,46 @@ const game = (doc, player1, player2)=>{
 };
 
 const start = ((doc)=>{
-    const form = doc.querySelector('.form-wrapper');
-    const btnStart = form.querySelector('.btn');
-    const inputP1 = form.querySelector('#p1');
-    const inputP2 = form.querySelector('#p2');
+    const isSinglePlayerMode = true;
+    // game mode modal
     const modalGameMode = Modal(doc, '#modal-game-mode');
-
-    const startGame = () => {
-        modalGameMode.show();
-        console.log(modalGameMode)
+    const btnSinglePlayer = modalGameMode.modal.querySelector('#single');
+    const btnMultiPlayer = modalGameMode.modal.querySelector('#multi');
+    modalGameMode.singlePlayerMode = () => {
+        modalGameMode.hide();
+        startGame(isSinglePlayerMode);
+    };
+    modalGameMode.multiPlayerMode = () => {
+        modalGameMode.hide();
+        startGame(!isSinglePlayerMode);
+    };
+    btnSinglePlayer.addEventListener('click', modalGameMode.singlePlayerMode.bind(modalGameMode));
+    btnMultiPlayer.addEventListener('click', modalGameMode.multiPlayerMode.bind(modalGameMode));
+    // form modal
+    const modalForm = Modal(doc, '#modal-form');
+    const btnStartGame = modalForm.modal.querySelector('.btn');
+    const inputP1 = modalForm.modal.querySelector('#p1');
+    const inputP2 = modalForm.modal.querySelector('#p2');
+    modalForm.startMultiFlow = () => {
         const p1 = inputP1.value || 'Player 1';
         const p2 = inputP2.value || 'Player 2';
         const g = game(doc, Player(p1, 1), Player(p2, 2));
-        toggleShow();
+        modalForm.hide();
         g.toggleShow();
+    }
+    btnStartGame.addEventListener('click', modalForm.startMultiFlow.bind(modalForm));
+    
+    startFlow();
+
+    function startFlow(){
+        modalGameMode.show();
+    }
+
+    function startGame(gameMode){
+        if (gameMode === isSinglePlayerMode){
+
+        } else {
+            modalForm.show();
+        }
     };
-
-    const toggleShow = () => {
-        form.style.display = form.style.display === 'none' ? 'grid' : 'none';
-    };
-
-    startGame();
-    //bind events
-    (()=>{
-        btnStart.addEventListener('click', startGame);
-    })()
-
-    return {toggleShow};
 })(document);
