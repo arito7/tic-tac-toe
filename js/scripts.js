@@ -162,8 +162,11 @@ const start = ((doc)=>{
     const btnStart = form.querySelector('.btn');
     const inputP1 = form.querySelector('#p1');
     const inputP2 = form.querySelector('#p2');
-    
+    const modalGameMode = Modal(doc, '#modal-game-mode');
+
     const startGame = () => {
+        modalGameMode.show();
+        console.log(modalGameMode)
         const p1 = inputP1.value || 'Player 1';
         const p2 = inputP2.value || 'Player 2';
         const g = game(doc, Player(p1, 1), Player(p2, 2));
@@ -175,9 +178,11 @@ const start = ((doc)=>{
         form.style.display = form.style.display === 'none' ? 'grid' : 'none';
     };
 
+    startGame();
     //bind events
     (()=>{
         btnStart.addEventListener('click', startGame);
     })()
+
     return {toggleShow};
 })(document);

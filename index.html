@@ -9,19 +9,33 @@
     <title>Tic Tac Toe</title>
 </head>
 <body class="bg-primary">
-    <h1 class="text-primary">Tic Tac Toe</h1>
-    <div class="modal">
-        <p>Player 1 wins!</p>
-        <button class="btn">Play Again</button>
+
+    <header id="header" class="text-primary">
+        <h1>Tic Tac Toe</h1>
+    </header>
+
+    <div id="container">
+        <!-- <div class="modal">
+            <p>Player 1 wins!</p>
+            <button class="btn">Play Again</button>
+        </div> -->
+        <div id="modal-game-mode" class="modal">
+            <div class="modal-contents">
+                <h4 class="title">Choose Game Mode</h4>
+                <button class="btn">Single Player</button>
+                <button class="btn">Play with a friend</button>
+            </div>
+        </div>
+        <div class="form-wrapper">
+            <form class="bg-secondary">
+                <h4 class="form-title">Enter Player Names</h4>
+                <div class="field"><input id="p1" type="text" placeholder="Player 1: O"></div>
+                <div class="field"><input id="p2" type="text" placeholder="Player 2: X"></div>
+                <button class="btn" type="button">Start Game</button>
+            </form>
+        </div>
+        <div class="game"></div>
     </div>
-    <div class="form-wrapper">
-        <form class="bg-secondary">
-            <h4 class="form-title">Enter Player Names</h4>
-            <div class="field"><input id="p1" type="text" placeholder="Player 1: O"></div>
-            <div class="field"><input id="p2" type="text" placeholder="Player 2: X"></div>
-            <button class="btn" type="button">Start Game</button>
-        </form>
-    </div>
-    <div class="game"></div>
+    <footer id="footer">footer</footer>
 </body>
 </html>
