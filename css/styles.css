@@ -123,7 +123,7 @@ div.game {
     text-align: center;
     z-index: 1;
     background-color: rgb(0,0,0); 
-    background-color: #323232ee;
+    background-color: #32323291;
 }
 
 .modal > .modal-contents {
@@ -133,7 +133,7 @@ div.game {
     height: 100%;
     grid-template-columns: 1fr;
     justify-items: center;
-    background-color: #121212;
+    background-color: #12121288;
 }
 .modal > .title {
     font-size: 2em;
