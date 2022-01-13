@@ -20,8 +20,6 @@ const game = (doc, player1, player2, isSinglePlayerMode = false)=>{
         index: 'data-index',
         marked: 'data-marked',
     }
-    // first turn
-    let currentTurn = player1;
     const WIDTH = 700;
     const cells = [];
     const wrapper = doc.querySelector('div.game');
@@ -67,6 +65,9 @@ const game = (doc, player1, player2, isSinglePlayerMode = false)=>{
             cells[i] = null;
         }
         currentTurn = player1;
+        if (currentTurn.isAI){
+            aiTurn();
+        }
         render();
     };
 
@@ -74,35 +75,35 @@ const game = (doc, player1, player2, isSinglePlayerMode = false)=>{
      * 0 = game is ongoing, 1 = player 1 wins, 2 = player 2 wins, 3 = game is a tie
      * @returns 0, 1, 2, or 3
      */
-    function checkWin(){
+    function checkWin(arr = cells){
         const checkCells = [1,3,4,5,7];
         for (let i of checkCells){
-            if (cells[i] !== null){
+            if (arr[i] !== null){
                 // check rows
                 if (i === 1 || i === 4 || i === 7){
-                    if (cells[i-1] === cells[i] && cells[i+1] === cells[i]){
-                        return cells[i] === player1.symbol ? 1 : 2;
+                    if (arr[i-1] === arr[i] && arr[i+1] === arr[i]){
+                        return arr[i] === player1.symbol ? 1 : 2;
                     }
                 }
                 // check columns
                 if (i === 3 || i === 4 || i === 5){
-                    if (cells[i-3] === cells[i] && cells[i+3] === cells[i]){
-                        return cells[i] === player1.symbol ? 1 : 2;
+                    if (arr[i-3] === arr[i] && arr[i+3] === arr[i]){
+                        return arr[i] === player1.symbol ? 1 : 2;
                     }
                 }
                 // check diagonals
                 if(i === 4){ 
-                    if (cells[i-2] === cells[i] && cells[i+2] === cells[i]){
-                        return cells[i] === player1.symbol ? 1 : 2;
+                    if (arr[i-2] === arr[i] && arr[i+2] === arr[i]){
+                        return arr[i] === player1.symbol ? 1 : 2;
                     }
-                    else if(cells[i-4] === cells[i] && cells[i+4] === cells[i]){
-                        return cells[i] === player1.symbol ? 1 : 2;
+                    else if(arr[i-4] === arr[i] && arr[i+4] === arr[i]){
+                        return arr[i] === player1.symbol ? 1 : 2;
                     }
                 }
             }
         }
         // if all cells are filled and no winner
-        if (!cells.includes(null)){
+        if (!arr.includes(null)){
             return 3;
         }
         return 0;
@@ -113,9 +114,10 @@ const game = (doc, player1, player2, isSinglePlayerMode = false)=>{
      * @param e event 
      */
     function mark(e){
+        console.log(e);
         if (!currentTurn.isAI && !e.target.getAttribute(CUSTOM_ATTRIBUTES.marked)){
-            const index = e.target.getAttribute(CUSTOM_ATTRIBUTES.index)
-            cells[index] = currentTurn.symbol;
+            const index = e.target.getAttribute(CUSTOM_ATTRIBUTES.index);
+            makeMove(currentTurn, index);
             gameOver(checkWin());
             switchTurns();
             if (currentTurn.isAI && cells.includes(null)){
@@ -128,13 +130,67 @@ const game = (doc, player1, player2, isSinglePlayerMode = false)=>{
         }
     };
 
+    function makeMove(player, index){
+        cells[index] = player.symbol;
+    }
+
     function aiTurn(){
-        while (currentTurn === player2){
-            let randomIndex = Math.floor(Math.random() * 8);
-            if (cells[randomIndex] === null){
-                cells[randomIndex] = currentTurn.symbol;
-                switchTurns();
+        let bestScore = -Infinity;
+        let bestIndex;
+        for (let i = 0; i < cells.length; i++){
+            if (cells[i] === null){
+                cells[i] = player2.symbol;
+                const score = minimax(cells, 0, false);
+                cells[i] = null;
+                if (score > bestScore){
+                    bestScore = score;
+                    bestIndex = i;
+                }
             }
+        }
+        makeMove(player2, bestIndex);
+        switchTurns();
+    }
+
+    /**
+     * @param board index of cell to evaluate
+     * @param depth remaining empty cells
+     * @param maximizingPlayer 
+     */
+    function minimax(board, depth, maximizingPlayer){
+        const winner = checkWin(board)
+        if (winner !== 0){
+            switch(winner){
+                case 1:
+                    return -1;
+                case 2: 
+                    return 1;
+                case 3: 
+                    return 0;
+            }
+        } 
+        if (maximizingPlayer){
+            let maxEval = -Infinity
+            for (let i = 0; i < board.length; i++){
+                if(board[i] === null){
+                    board[i] = player2.symbol;
+                    const eval = minimax(board, depth - 1, false);
+                    board[i] = null;
+                    maxEval = Math.max(maxEval, eval);
+                }
+            }
+            return maxEval;
+        } else {
+            let minEval = Infinity
+            for (let i = 0; i < board.length; i++){
+                if(board[i] === null){
+                    board[i] = player1.symbol;
+                    const eval = minimax(board, depth - 1, true);
+                    board[i] = null;
+                    minEval = Math.min(minEval, eval);
+                }
+            }
+            return minEval;
         }
     }
 
