@@ -46,7 +46,7 @@ const game = (doc, player1, player2, isSinglePlayerMode = false)=>{
         }
         for(let i = 0; i < 9; i++){
             let square = doc.createElement('div');
-            square.classList.add('square', 'text-primary');
+            square.classList.add('square', 'text-primary', 'bg-secondary');
             square.setAttribute(CUSTOM_ATTRIBUTES.index, i);
             square.style.width = `${WIDTH/3}px`;  
             square.style.height = `${WIDTH/3}px`;

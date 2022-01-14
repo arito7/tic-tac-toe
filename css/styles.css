@@ -58,12 +58,14 @@ div.game {
     justify-content: center;
     justify-items: center;
     margin: auto;
+    gap: 8px;
     margin-top: 16px;
     max-width: 600px;
 }
 
 .game > .square {
-    border: 1px solid #03dac6;
+    border: 1px solid #232323;
+    border-radius: 8px;
     font-size: 10em;
     text-align: center;
 }
@@ -103,6 +105,7 @@ div.game {
     border-radius: 16px;
     color: #000;
     font-weight: bold;
+    max-width: 250px;
     height: 32px;
     margin-top: 8px;
     width: 50%;
