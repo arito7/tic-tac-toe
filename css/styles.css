@@ -11,6 +11,9 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+button {
+  cursor: pointer;
+}
 .text-primary {
   color: #fff;
 }
@@ -53,9 +56,10 @@ h1 {
   z-index: 1;
 }
 #container {
-  flex: 1;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 div.game {
@@ -65,7 +69,6 @@ div.game {
   justify-items: center;
   margin: auto;
   gap: 8px;
-  margin-top: 16px;
   max-width: 600px;
 }
 
